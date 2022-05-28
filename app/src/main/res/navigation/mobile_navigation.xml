@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="pl.adrian99.javaproandroid.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/nav_slide_viewer"
+        android:name="pl.adrian99.javaproandroid.ui.slideviewer.SlideViewerFragment"
+        android:label="@string/menu_slideviewer"
+        tools:layout="@layout/fragment_slideviewer" />
+    <fragment
+        android:id="@+id/nav_code_viewer"
+        android:name="pl.adrian99.javaproandroid.ui.codeviewer.CodeViewerFragment"
+        android:label="@string/menu_codeviewer"
+        tools:layout="@layout/fragment_code_viewer" />
+    <fragment
+        android:id="@+id/nav_web_tools"
+        android:name="pl.adrian99.javaproandroid.ui.webtools.WebToolsFragment"
+        android:label="@string/menu_webtools"
+        tools:layout="@layout/fragment_web_tools" />
+    <fragment
+        android:id="@+id/nav_test_selection"
+        android:name="pl.adrian99.javaproandroid.ui.test.TestSelectionFragment"
+        android:label="@string/menu_test"
+        tools:layout="@layout/fragment_test_selection" >
+        <action
+            android:id="@+id/action_nav_test_selection_to_testFragment"
+            app:destination="@id/nav_test" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_test"
+        android:name="pl.adrian99.javaproandroid.ui.test.TestFragment"
+        android:label="@string/menu_test"
+        tools:layout="@layout/fragment_test">
+        <argument
+            android:name="testId"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>
