@@ -1,5 +1,6 @@
 package pl.adrian99.javaproandroid.ui.test;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,43 +12,52 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import pl.adrian99.javaproandroid.R;
-import pl.adrian99.javaproandroid.databinding.FragmentTestBinding;
+import pl.adrian99.javaproandroid.data.AsyncHttpClient;
+import pl.adrian99.javaproandroid.data.dtos.QuizCategory;
 import pl.adrian99.javaproandroid.databinding.FragmentTestSelectionBinding;
 
 public class TestSelectionFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private final HashMap<Integer, String> tests = new HashMap<>();
-    private ArrayAdapter<String> testsAdapter;
+    private ArrayList<QuizCategory> tests = new ArrayList<>();
+    private final ArrayList<String> testNames = new ArrayList<>();
     private FragmentTestSelectionBinding binding;
+    private Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tests.put(0, "Test1");
-        tests.put(1, "Test2");
-        tests.put(2, "Test3");
-        tests.put(3, "Test4");
-//        testsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTestSelectionBinding.inflate(inflater, container, false);
+        activity = getActivity();
 
-        testsAdapter = new ArrayAdapter<>(
+        ArrayAdapter<String> testsAdapter = new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_list_item_1,
-                tests.values().toArray(new String[0])
+                testNames
         );
         binding.testsList.setAdapter(testsAdapter);
         binding.testsList.setOnItemClickListener(this);
+
+        AsyncHttpClient.get("quiz/categories",
+                QuizCategory[].class,
+                response -> activity.runOnUiThread(() -> {
+                    if (response != null) {
+                        tests = new ArrayList<>(Arrays.asList(response));
+                        testNames.clear();
+                        tests.forEach(test -> testNames.add(test.getName()));
+                        testsAdapter.notifyDataSetChanged();
+                    }
+                }));
 
         return binding.getRoot();
     }
@@ -61,7 +71,7 @@ public class TestSelectionFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle arguments = new Bundle();
-        arguments.putInt("testId", tests.keySet().toArray(new Integer[0])[position]);
+        arguments.putLong("testId", tests.get(position).getId());
         Navigation.findNavController(view).navigate(R.id.action_nav_test_selection_to_testFragment, arguments);
     }
 }
