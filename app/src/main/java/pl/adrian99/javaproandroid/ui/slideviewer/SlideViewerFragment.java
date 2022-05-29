@@ -1,5 +1,6 @@
 package pl.adrian99.javaproandroid.ui.slideviewer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import pl.adrian99.javaproandroid.data.AsyncHttpClient;
 import pl.adrian99.javaproandroid.data.dtos.SlideIds;
 import pl.adrian99.javaproandroid.databinding.FragmentSlideviewerBinding;
+import pl.adrian99.javaproandroid.util.OnSwipeTouchListener;
 
 public class SlideViewerFragment extends Fragment {
 
@@ -34,6 +36,7 @@ public class SlideViewerFragment extends Fragment {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,16 +55,14 @@ public class SlideViewerFragment extends Fragment {
                 }
         );
 
-        binding.buttonPrev.setOnClickListener(view -> {
-            if (currentSlide > 0) {
-                currentSlide--;
-                showSlide();
+        binding.buttonPrev.setOnClickListener(view -> showPreviousSlide());
+        binding.buttonNext.setOnClickListener(view -> showNextSlide());
+        binding.slideDisplay.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeRight() {
+                showPreviousSlide();
             }
-        });
-        binding.buttonNext.setOnClickListener(view -> {
-            if (currentSlide < slideIds.getSlideIds().size() - 1) {
-                currentSlide++;
-                showSlide();
+            public void onSwipeLeft() {
+                showNextSlide();
             }
         });
 
@@ -72,6 +73,20 @@ public class SlideViewerFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void showNextSlide() {
+        if (currentSlide < slideIds.getSlideIds().size() - 1) {
+            currentSlide++;
+            showSlide();
+        }
+    }
+
+    private void showPreviousSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide();
+        }
     }
 
     private void showSlide() {
