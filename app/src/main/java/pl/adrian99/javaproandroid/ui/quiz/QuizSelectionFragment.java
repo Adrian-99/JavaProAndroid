@@ -1,4 +1,4 @@
-package pl.adrian99.javaproandroid.ui.test;
+package pl.adrian99.javaproandroid.ui.quiz;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import pl.adrian99.javaproandroid.R;
 import pl.adrian99.javaproandroid.data.AsyncHttpClient;
@@ -23,7 +24,7 @@ import pl.adrian99.javaproandroid.databinding.FragmentQuizSelectionBinding;
 
 public class QuizSelectionFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private ArrayList<QuizCategory> tests = new ArrayList<>();
+    private List<QuizCategory> tests = new ArrayList<>();
     private final ArrayList<String> testNames = new ArrayList<>();
     private FragmentQuizSelectionBinding binding;
     private Activity activity;
@@ -51,7 +52,7 @@ public class QuizSelectionFragment extends Fragment implements AdapterView.OnIte
                 QuizCategory[].class,
                 response -> activity.runOnUiThread(() -> {
                     if (response != null) {
-                        tests = new ArrayList<>(Arrays.asList(response));
+                        tests = Arrays.asList(response);
                         testNames.clear();
                         tests.forEach(test -> testNames.add(test.getName()));
                         testsAdapter.notifyDataSetChanged();

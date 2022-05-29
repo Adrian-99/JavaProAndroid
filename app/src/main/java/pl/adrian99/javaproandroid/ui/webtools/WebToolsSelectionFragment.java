@@ -1,5 +1,6 @@
 package pl.adrian99.javaproandroid.ui.webtools;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,16 +13,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import pl.adrian99.javaproandroid.R;
+import pl.adrian99.javaproandroid.data.AsyncHttpClient;
+import pl.adrian99.javaproandroid.data.dtos.WebTool;
 import pl.adrian99.javaproandroid.databinding.FragmentWebToolsSelectionBinding;
 
 public class WebToolsSelectionFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private final HashMap<String, String> links = new HashMap<>();
-    private ArrayAdapter<String> linksAdapter;
+    private List<WebTool> webTools = new ArrayList<>();
+    private final ArrayList<String> webToolsUrls = new ArrayList<>();
+    private ArrayAdapter<String> webToolsUrlsAdapter;
     private FragmentWebToolsSelectionBinding binding;
+    private Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,14 +39,26 @@ public class WebToolsSelectionFragment extends Fragment implements AdapterView.O
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentWebToolsSelectionBinding.inflate(inflater, container, false);
+        activity = getActivity();
 
-        linksAdapter = new ArrayAdapter<>(
+        webToolsUrlsAdapter = new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_list_item_1,
-                links.values().toArray(new String[0])
+                webToolsUrls
         );
-        binding.linksList.setAdapter(linksAdapter);
+        binding.linksList.setAdapter(webToolsUrlsAdapter);
         binding.linksList.setOnItemClickListener(this);
+
+        AsyncHttpClient.get("webtools",
+                WebTool[].class,
+                response -> activity.runOnUiThread(() -> {
+                    if (response != null) {
+                        webTools = Arrays.asList(response);
+                        webToolsUrls.clear();
+                        webTools.forEach(webTool -> webToolsUrls.add(webTool.getName()));
+                        webToolsUrlsAdapter.notifyDataSetChanged();
+                    }
+                }));
 
         return binding.getRoot();
     }
@@ -53,7 +72,7 @@ public class WebToolsSelectionFragment extends Fragment implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle arguments = new Bundle();
-        arguments.putString("link", links.keySet().toArray(new String[0])[position]);
+        arguments.putString("url", webTools.get(position).getUrl());
         Navigation.findNavController(view).navigate(R.id.action_nav_web_tools_selection_to_nav_web_tools, arguments);
     }
 }

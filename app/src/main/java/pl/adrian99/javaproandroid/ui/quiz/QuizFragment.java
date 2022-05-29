@@ -1,4 +1,4 @@
-package pl.adrian99.javaproandroid.ui.test;
+package pl.adrian99.javaproandroid.ui.quiz;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,7 +1,9 @@
 package pl.adrian99.javaproandroid.ui.webtools;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -10,29 +12,29 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import pl.adrian99.javaproandroid.R;
 import pl.adrian99.javaproandroid.databinding.FragmentWebToolsBinding;
 
 public class WebToolsFragment extends Fragment {
 
-    private FragmentWebToolsBinding binding;
-    private String link = null;
+    private String url = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            link = getArguments().getString("link");
+            url = getArguments().getString("url");
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentWebToolsBinding.inflate(inflater, container, false);
+        FragmentWebToolsBinding binding = FragmentWebToolsBinding.inflate(inflater, container, false);
 
-        binding.webView.loadUrl(link);
+        binding.webView.loadUrl(url);
         binding.webView.setWebViewClient(new MyWebViewClient());
+        binding.webView.getSettings().setJavaScriptEnabled(true);
 
         return binding.getRoot();
     }

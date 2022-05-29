@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_quiz_selection"
-        android:name="pl.adrian99.javaproandroid.ui.test.QuizSelectionFragment"
+        android:name="pl.adrian99.javaproandroid.ui.quiz.QuizSelectionFragment"
         android:label="@string/menu_quiz"
         tools:layout="@layout/fragment_quiz_selection" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_quiz"
-        android:name="pl.adrian99.javaproandroid.ui.test.QuizFragment"
+        android:name="pl.adrian99.javaproandroid.ui.quiz.QuizFragment"
         android:label="@string/menu_quiz"
         tools:layout="@layout/fragment_quiz">
         <argument
@@ -53,7 +53,7 @@
         android:label="@string/menu_webtools"
         tools:layout="@layout/fragment_web_tools" >
         <argument
-            android:name="link"
+            android:name="url"
             app:argType="string" />
     </fragment>
 
