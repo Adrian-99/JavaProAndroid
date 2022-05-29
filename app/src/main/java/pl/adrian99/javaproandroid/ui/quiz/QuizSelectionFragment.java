@@ -70,7 +70,7 @@ public class QuizSelectionFragment extends Fragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bundle arguments = new Bundle();
+        var arguments = new Bundle();
         arguments.putLong("quizCategoryId", tests.get(position).getId());
         Navigation.findNavController(view).navigate(R.id.action_nav_quiz_selection_to_quizFragment, arguments);
     }

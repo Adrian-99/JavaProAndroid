@@ -30,7 +30,7 @@ public class WebToolsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentWebToolsBinding binding = FragmentWebToolsBinding.inflate(inflater, container, false);
+        var binding = FragmentWebToolsBinding.inflate(inflater, container, false);
 
         binding.webView.loadUrl(url);
         binding.webView.setWebViewClient(new MyWebViewClient());

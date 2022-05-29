@@ -71,7 +71,7 @@ public class WebToolsSelectionFragment extends Fragment implements AdapterView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bundle arguments = new Bundle();
+        var arguments = new Bundle();
         arguments.putString("url", webTools.get(position).getUrl());
         Navigation.findNavController(view).navigate(R.id.action_nav_web_tools_selection_to_nav_web_tools, arguments);
     }

@@ -42,6 +42,23 @@ public class AsyncHttpClient {
         });
     }
 
+    public static void getBytes(String endpoint, Callback<byte[]> callback) {
+        executor.execute(() -> {
+            try {
+                var request = new Request.Builder()
+                        .url(BASE_URL + endpoint)
+                        .build();
+                try (var response = client.newCall(request).execute()) {
+                    if (response.body() != null) {
+                        callback.call(response.body().bytes());
+                    }
+                }
+            } catch (IOException exception) {
+                System.err.println(exception.getMessage());
+            }
+        });
+    }
+
     public static <T> void post(String endpoint, Object requestBody, Class<T> responseType, Callback<T> callback) {
         executor.execute(() -> {
             try {

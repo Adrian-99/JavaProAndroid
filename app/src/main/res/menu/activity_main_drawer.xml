@@ -11,7 +11,7 @@
             android:id="@+id/nav_quiz_selection"
             android:title="@string/menu_quiz" />
         <item
-            android:id="@+id/nav_slide_viewer"
+            android:id="@+id/nav_slide_viewer_selection"
             android:title="@string/menu_slideviewer" />
         <item
             android:id="@+id/nav_code_viewer"
