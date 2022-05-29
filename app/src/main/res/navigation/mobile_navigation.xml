@@ -30,21 +30,21 @@
             app:destination="@id/nav_web_tools" />
     </fragment>
     <fragment
-        android:id="@+id/nav_test_selection"
-        android:name="pl.adrian99.javaproandroid.ui.test.TestSelectionFragment"
-        android:label="@string/menu_test"
-        tools:layout="@layout/fragment_test_selection" >
+        android:id="@+id/nav_quiz_selection"
+        android:name="pl.adrian99.javaproandroid.ui.test.QuizSelectionFragment"
+        android:label="@string/menu_quiz"
+        tools:layout="@layout/fragment_quiz_selection" >
         <action
-            android:id="@+id/action_nav_test_selection_to_testFragment"
-            app:destination="@id/nav_test" />
+            android:id="@+id/action_nav_quiz_selection_to_quizFragment"
+            app:destination="@id/nav_quiz" />
     </fragment>
     <fragment
-        android:id="@+id/nav_test"
-        android:name="pl.adrian99.javaproandroid.ui.test.TestFragment"
-        android:label="@string/menu_test"
-        tools:layout="@layout/fragment_test">
+        android:id="@+id/nav_quiz"
+        android:name="pl.adrian99.javaproandroid.ui.test.QuizFragment"
+        android:label="@string/menu_quiz"
+        tools:layout="@layout/fragment_quiz">
         <argument
-            android:name="testId"
+            android:name="quizCategoryId"
             app:argType="long" />
     </fragment>
     <fragment

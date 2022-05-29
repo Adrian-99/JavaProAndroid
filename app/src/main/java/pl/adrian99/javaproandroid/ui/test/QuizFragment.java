@@ -17,14 +17,14 @@ import java.util.List;
 
 import pl.adrian99.javaproandroid.R;
 import pl.adrian99.javaproandroid.data.AsyncHttpClient;
-import pl.adrian99.javaproandroid.data.dtos.AnswersValidation;
-import pl.adrian99.javaproandroid.data.dtos.AnswersValidationResult;
+import pl.adrian99.javaproandroid.data.dtos.QuizAnswersValidation;
+import pl.adrian99.javaproandroid.data.dtos.QuizAnswersValidationResult;
 import pl.adrian99.javaproandroid.data.dtos.QuizQuestion;
-import pl.adrian99.javaproandroid.databinding.FragmentTestBinding;
+import pl.adrian99.javaproandroid.databinding.FragmentQuizBinding;
 
-public class TestFragment extends Fragment implements View.OnClickListener {
+public class QuizFragment extends Fragment implements View.OnClickListener {
 
-    private FragmentTestBinding binding;
+    private FragmentQuizBinding binding;
     private Activity activity;
     private Long testId = null;
     private List<QuizQuestion> questions;
@@ -35,14 +35,14 @@ public class TestFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            testId = getArguments().getLong("testId");
+            testId = getArguments().getLong("quizCategoryId");
         }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentTestBinding.inflate(inflater, container, false);
+        binding = FragmentQuizBinding.inflate(inflater, container, false);
         activity = getActivity();
 
         binding.answersGroup.setVisibility(View.INVISIBLE);
@@ -55,7 +55,7 @@ public class TestFragment extends Fragment implements View.OnClickListener {
                     questions = Arrays.asList(response);
                     Collections.shuffle(questions);
                     activity.runOnUiThread(() -> {
-                        showNextQuestion();
+                        showQuestion();
                         binding.answersGroup.setVisibility(View.VISIBLE);
                         binding.send.setVisibility(View.VISIBLE);
                     });
@@ -76,8 +76,7 @@ public class TestFragment extends Fragment implements View.OnClickListener {
         checkAnswers();
     }
 
-    private void showNextQuestion() {
-        currentQuestion++;
+    private void showQuestion() {
         if (currentQuestion < questions.size()) {
             var question = questions.get(currentQuestion);
             Collections.shuffle(question.getAnswers());
@@ -116,17 +115,18 @@ public class TestFragment extends Fragment implements View.OnClickListener {
             checkedAnswerIds.add(answers.get(3).getId());
         }
 
-        var answersValidation = new AnswersValidation();
+        var answersValidation = new QuizAnswersValidation();
         answersValidation.setCheckedAnswerIds(checkedAnswerIds);
 
         AsyncHttpClient.post("quiz/answers/" + question.getId() + "/validate",
                 answersValidation,
-                AnswersValidationResult.class,
+                QuizAnswersValidationResult.class,
                 response -> {
                     if (response.areCorrect()) {
                         correctAnswersCount++;
                     }
-                    activity.runOnUiThread(this::showNextQuestion);
+                    currentQuestion++;
+                    activity.runOnUiThread(this::showQuestion);
                 });
     }
 }

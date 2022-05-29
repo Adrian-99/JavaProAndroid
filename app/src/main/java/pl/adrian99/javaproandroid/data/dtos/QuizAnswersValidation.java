@@ -2,7 +2,7 @@ package pl.adrian99.javaproandroid.data.dtos;
 
 import java.util.List;
 
-public class AnswersValidation {
+public class QuizAnswersValidation {
     private List<Long> checkedAnswerIds;
 
     public List<Long> getCheckedAnswerIds() {

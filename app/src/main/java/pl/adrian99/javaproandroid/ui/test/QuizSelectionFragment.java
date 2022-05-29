@@ -15,18 +15,17 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import pl.adrian99.javaproandroid.R;
 import pl.adrian99.javaproandroid.data.AsyncHttpClient;
 import pl.adrian99.javaproandroid.data.dtos.QuizCategory;
-import pl.adrian99.javaproandroid.databinding.FragmentTestSelectionBinding;
+import pl.adrian99.javaproandroid.databinding.FragmentQuizSelectionBinding;
 
-public class TestSelectionFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class QuizSelectionFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private ArrayList<QuizCategory> tests = new ArrayList<>();
     private final ArrayList<String> testNames = new ArrayList<>();
-    private FragmentTestSelectionBinding binding;
+    private FragmentQuizSelectionBinding binding;
     private Activity activity;
 
     @Override
@@ -37,7 +36,7 @@ public class TestSelectionFragment extends Fragment implements AdapterView.OnIte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentTestSelectionBinding.inflate(inflater, container, false);
+        binding = FragmentQuizSelectionBinding.inflate(inflater, container, false);
         activity = getActivity();
 
         ArrayAdapter<String> testsAdapter = new ArrayAdapter<>(
@@ -71,7 +70,7 @@ public class TestSelectionFragment extends Fragment implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle arguments = new Bundle();
-        arguments.putLong("testId", tests.get(position).getId());
-        Navigation.findNavController(view).navigate(R.id.action_nav_test_selection_to_testFragment, arguments);
+        arguments.putLong("quizCategoryId", tests.get(position).getId());
+        Navigation.findNavController(view).navigate(R.id.action_nav_quiz_selection_to_quizFragment, arguments);
     }
 }

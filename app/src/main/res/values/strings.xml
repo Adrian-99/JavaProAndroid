@@ -6,7 +6,7 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_test">Test Java PRO</string>
+    <string name="menu_quiz">Quiz Java PRO</string>
     <string name="menu_slideviewer">Slide Viewer PRO</string>
     <string name="menu_codeviewer">Code Viewer PRO</string>
     <string name="menu_webtools">Web Tools PRO</string>

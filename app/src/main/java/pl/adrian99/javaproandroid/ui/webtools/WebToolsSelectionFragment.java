@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import java.util.HashMap;
 
 import pl.adrian99.javaproandroid.R;
-import pl.adrian99.javaproandroid.databinding.FragmentTestSelectionBinding;
 import pl.adrian99.javaproandroid.databinding.FragmentWebToolsSelectionBinding;
 
 public class WebToolsSelectionFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -27,11 +26,6 @@ public class WebToolsSelectionFragment extends Fragment implements AdapterView.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        links.put("https://docs.oracle.com/en/java/javase/18/docs/api/index.html", "JDK 18 API");
-        links.put("https://developer.android.com/guide", "Android Guide");
-        links.put("https://openjfx.io/javadoc/18/", "JavaFX 18 API");
-        links.put("https://www.oracle.com/pl/java/technologies/java-ee-glance.html", "Java EE API");
-//        linksAdapter.notifyDataSetChanged();
     }
 
     @Override

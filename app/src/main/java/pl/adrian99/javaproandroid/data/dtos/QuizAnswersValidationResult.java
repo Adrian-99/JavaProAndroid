@@ -1,6 +1,6 @@
 package pl.adrian99.javaproandroid.data.dtos;
 
-public class AnswersValidationResult {
+public class QuizAnswersValidationResult {
     private boolean areCorrect;
 
     public boolean areCorrect() {
