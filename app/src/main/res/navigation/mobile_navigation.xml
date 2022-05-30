@@ -14,7 +14,11 @@
         android:id="@+id/nav_code_viewer"
         android:name="pl.adrian99.javaproandroid.ui.codeviewer.CodeViewerFragment"
         android:label="@string/menu_codeviewer"
-        tools:layout="@layout/fragment_code_viewer" />
+        tools:layout="@layout/fragment_code_viewer" >
+        <argument
+            android:name="exampleId"
+            app:argType="long" />
+    </fragment>
     <fragment
         android:id="@+id/nav_web_tools_selection"
         android:name="pl.adrian99.javaproandroid.ui.webtools.WebToolsSelectionFragment"
@@ -68,6 +72,27 @@
         <argument
             android:name="categoryId"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_code_viewer_example_selection"
+        android:name="pl.adrian99.javaproandroid.ui.codeviewer.CodeViewerExampleSelectionFragment"
+        android:label="@string/menu_codeviewer"
+        tools:layout="@layout/fragment_code_viewer_example_selection" >
+        <action
+            android:id="@+id/action_nav_code_viewer_example_selection_to_nav_code_viewer"
+            app:destination="@id/nav_code_viewer" />
+        <argument
+            android:name="categoryId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_code_viewer_category_selection"
+        android:name="pl.adrian99.javaproandroid.ui.codeviewer.CodeViewerCategorySelectionFragment"
+        android:label="@string/menu_codeviewer"
+        tools:layout="@layout/fragment_code_viewer_category_selection" >
+        <action
+            android:id="@+id/action_nav_code_viewer_category_selection_to_nav_code_viewer_example_selection"
+            app:destination="@id/nav_code_viewer_example_selection" />
     </fragment>
 
 </navigation>

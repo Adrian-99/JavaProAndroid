@@ -14,7 +14,7 @@
             android:id="@+id/nav_slide_viewer_selection"
             android:title="@string/menu_slideviewer" />
         <item
-            android:id="@+id/nav_code_viewer"
+            android:id="@+id/nav_code_viewer_category_selection"
             android:title="@string/menu_codeviewer" />
         <item
             android:id="@+id/nav_web_tools_selection"
