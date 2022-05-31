@@ -42,6 +42,8 @@ public class AsyncHttpClient {
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
                         onResponse.call(mapper.readValue(response.body().string(), responseType));
+                    } else {
+                        onResponse.call(null);
                     }
                 }
             } catch (IOException exception) {
@@ -60,6 +62,8 @@ public class AsyncHttpClient {
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
                         onResponse.call(response.body().bytes());
+                    } else {
+                        onResponse.call(null);
                     }
                 }
             } catch (IOException exception) {
@@ -84,6 +88,8 @@ public class AsyncHttpClient {
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
                         onResponse.call(mapper.readValue(response.body().string(), responseType));
+                    } else {
+                        onResponse.call(null);
                     }
                 }
             } catch (IOException exception) {

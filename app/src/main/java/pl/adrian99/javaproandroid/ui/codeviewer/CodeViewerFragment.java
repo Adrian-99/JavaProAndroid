@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -43,17 +44,19 @@ public class CodeViewerFragment extends Fragment {
         binding = FragmentCodeViewerBinding.inflate(inflater, container, false);
         activity = getActivity();
 
+
         codeAdapter = new CodeAdapter(getContext(), codes);
         binding.codesList.setAdapter(codeAdapter);
+        var codeHeader = inflater.inflate(R.layout.code_header_layout, null);
+        binding.codesList.addHeaderView(codeHeader);
 
         AsyncHttpClient.get("code/" + codeExampleId,
                 CodeExample.class,
                 response -> activity.runOnUiThread(() -> {
-                    binding.name.setText(response.getName());
-                    binding.context.setText(response.getContext());
+                    ((TextView)codeHeader.findViewById(R.id.name)).setText(response.getName());
+                    ((TextView)codeHeader.findViewById(R.id.context)).setText(response.getContext());
                     codeAdapter.clear();
-                    response.getCodes().forEach(codeAdapter::add);
-//                    codeAdapter.addAll(response.getCodes());
+                    codeAdapter.addAll(response.getCodes());
                 }),
                 exception -> activity.runOnUiThread(() ->
                         Toast.makeText(activity, getString(R.string.server_connection_error), Toast.LENGTH_LONG).show()
