@@ -9,21 +9,27 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import pl.adrian99.javaproandroid.R;
 import pl.adrian99.javaproandroid.data.AsyncHttpClient;
+import pl.adrian99.javaproandroid.data.dtos.QuizAnswer;
 import pl.adrian99.javaproandroid.data.dtos.QuizAnswersValidation;
 import pl.adrian99.javaproandroid.data.dtos.QuizAnswersValidationResult;
 import pl.adrian99.javaproandroid.data.dtos.QuizQuestion;
 import pl.adrian99.javaproandroid.databinding.FragmentQuizBinding;
+import pl.adrian99.javaproandroid.util.QuizAnswerAdapter;
 
-public class QuizFragment extends Fragment implements View.OnClickListener {
+public class QuizFragment extends Fragment {
 
     private FragmentQuizBinding binding;
     private Activity activity;
@@ -31,6 +37,9 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     private List<QuizQuestion> questions;
     private int currentQuestion = 0;
     private int correctAnswersCount = 0;
+    private QuizAnswerAdapter quizAnswerAdapter;
+    private TextView questionText;
+    private Button sendButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +55,22 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
         activity = getActivity();
 
-        binding.answersGroup.setVisibility(View.INVISIBLE);
-        binding.send.setVisibility(View.INVISIBLE);
-        binding.send.setOnClickListener(this);
+        var headerView = inflater.inflate(R.layout.quiz_header_layout, null);
+        var footerView = inflater.inflate(R.layout.quiz_footer_layout, null);
+
+        quizAnswerAdapter = new QuizAnswerAdapter(getContext(), new ArrayList<>());
+        binding.answersList.setAdapter(quizAnswerAdapter);
+        binding.answersList.addHeaderView(headerView);
+        binding.answersList.addFooterView(footerView);
+
+        questionText = headerView.findViewById(R.id.question);
+        sendButton = footerView.findViewById(R.id.send);
+
+        sendButton.setVisibility(View.INVISIBLE);
+        sendButton.setOnClickListener(view -> {
+            sendButton.setClickable(false);
+            checkAnswers();
+        });
 
         AsyncHttpClient.get("quiz/questions/" + testId,
                 QuizQuestion[].class,
@@ -57,8 +79,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                     Collections.shuffle(questions);
                     activity.runOnUiThread(() -> {
                         showQuestion();
-                        binding.answersGroup.setVisibility(View.VISIBLE);
-                        binding.send.setVisibility(View.VISIBLE);
+                        sendButton.setVisibility(View.VISIBLE);
                     });
                 },
                 exception -> activity.runOnUiThread(() ->
@@ -75,50 +96,32 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         binding = null;
     }
 
-    @Override
-    public void onClick(View v) {
-        binding.send.setClickable(false);
-        checkAnswers();
-    }
-
     private void showQuestion() {
         if (currentQuestion < questions.size()) {
             var question = questions.get(currentQuestion);
             Collections.shuffle(question.getAnswers());
-            binding.question.setText(question.getQuestion());
-            binding.answer1.setChecked(false);
-            binding.answer2.setChecked(false);
-            binding.answer3.setChecked(false);
-            binding.answer4.setChecked(false);
-            binding.answer1.setText(question.getAnswers().get(0).getAnswer());
-            binding.answer2.setText(question.getAnswers().get(1).getAnswer());
-            binding.answer3.setText(question.getAnswers().get(2).getAnswer());
-            binding.answer4.setText(question.getAnswers().get(3).getAnswer());
-            binding.send.setClickable(true);
+            questionText.setText(question.getQuestion());
+            quizAnswerAdapter.clearCheckedAnswers();
+            quizAnswerAdapter.clear();
+            quizAnswerAdapter.addAll(question.getAnswers().stream()
+                    .map(QuizAnswer::getAnswer)
+                    .collect(Collectors.toList())
+            );
+            sendButton.setClickable(true);
         } else {
-            binding.question.setText(getString(R.string.test_results, correctAnswersCount, questions.size()));
-            binding.answersGroup.setVisibility(View.INVISIBLE);
-            binding.send.setVisibility(View.INVISIBLE);
+            questionText.setText(getString(R.string.test_results, correctAnswersCount, questions.size()));
+            quizAnswerAdapter.clear();
+            sendButton.setVisibility(View.INVISIBLE);
         }
     }
 
     private void checkAnswers() {
-        List<Long> checkedAnswerIds = new ArrayList<>();
         var question = questions.get(currentQuestion);
         var answers = question.getAnswers();
 
-        if (binding.answer1.isChecked()) {
-            checkedAnswerIds.add(answers.get(0).getId());
-        }
-        if (binding.answer2.isChecked()) {
-            checkedAnswerIds.add(answers.get(1).getId());
-        }
-        if (binding.answer3.isChecked()) {
-            checkedAnswerIds.add(answers.get(2).getId());
-        }
-        if (binding.answer4.isChecked()) {
-            checkedAnswerIds.add(answers.get(3).getId());
-        }
+        List<Long> checkedAnswerIds = quizAnswerAdapter.getCheckedAnswers().stream()
+                .map(position -> answers.get(position).getId())
+                .collect(Collectors.toList());
 
         var answersValidation = new QuizAnswersValidation();
         answersValidation.setCheckedAnswerIds(checkedAnswerIds);

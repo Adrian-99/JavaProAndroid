@@ -44,7 +44,6 @@ public class CodeViewerFragment extends Fragment {
         binding = FragmentCodeViewerBinding.inflate(inflater, container, false);
         activity = getActivity();
 
-
         codeAdapter = new CodeAdapter(getContext(), codes);
         binding.codesList.setAdapter(codeAdapter);
         var codeHeader = inflater.inflate(R.layout.code_header_layout, null);
