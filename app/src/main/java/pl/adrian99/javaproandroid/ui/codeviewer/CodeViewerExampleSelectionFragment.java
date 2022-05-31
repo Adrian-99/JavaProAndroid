@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,7 +67,10 @@ public class CodeViewerExampleSelectionFragment extends Fragment implements Adap
                         codeExamples.forEach(example -> codeExamplesNames.add(example.getName()));
                         codeExamplesNamesAdapter.notifyDataSetChanged();
                     }
-                })
+                }),
+                exception -> activity.runOnUiThread(() ->
+                        Toast.makeText(activity, getString(R.string.server_connection_error), Toast.LENGTH_LONG).show()
+                )
         );
 
         return binding.getRoot();

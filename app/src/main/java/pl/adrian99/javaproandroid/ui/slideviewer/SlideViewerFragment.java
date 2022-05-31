@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 
+import pl.adrian99.javaproandroid.R;
 import pl.adrian99.javaproandroid.data.AsyncHttpClient;
 import pl.adrian99.javaproandroid.data.dtos.SlideIds;
 import pl.adrian99.javaproandroid.databinding.FragmentSlideviewerBinding;
@@ -52,7 +54,10 @@ public class SlideViewerFragment extends Fragment {
                     if (slideIds.getSlideIds().size() > 0) {
                         activity.runOnUiThread(this::showSlide);
                     }
-                }
+                },
+                exception -> activity.runOnUiThread(() ->
+                        Toast.makeText(activity, getString(R.string.server_connection_error), Toast.LENGTH_LONG).show()
+                )
         );
 
         binding.buttonPrev.setOnClickListener(view -> showPreviousSlide());
@@ -104,7 +109,10 @@ public class SlideViewerFragment extends Fragment {
                         if (slideIds.getSlideIds().get(currentSlide).equals(slideId)) {
                             binding.slideDisplay.setImageBitmap(slides.get(slideId));
                         }
-                    })
+                    }),
+                    exception -> activity.runOnUiThread(() ->
+                            Toast.makeText(activity, getString(R.string.server_connection_error), Toast.LENGTH_LONG).show()
+                    )
             );
         }
     }

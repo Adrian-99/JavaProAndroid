@@ -14,8 +14,7 @@
     <string name="test_send">Wyślij</string>
     <string name="test_results">Test zakończony - wynik: %d/%d</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gt"><![CDATA[>]]></string>
     <string name="lt"><![CDATA[<]]></string>
+    <string name="server_connection_error">Nie udało się połączyć z serwerem</string>
 </resources>

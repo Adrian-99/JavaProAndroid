@@ -3,9 +3,9 @@ package pl.adrian99.javaproandroid.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -14,18 +14,26 @@ import okhttp3.RequestBody;
 
 public class AsyncHttpClient {
 
-    private static final String BASE_URL = "http://192.168.1.3:8080/";
+//    private static final String BASE_URL = "http://192.168.1.3:8080/";
+    private static final String BASE_URL = "http://192.168.100.5:8080/";
+//    private static final String BASE_URL = "http://192.168.135.180:8080/";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static final Executor executor = Executors.newSingleThreadExecutor();
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client;
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public interface Callback<T> {
         void call(T arg);
     }
 
-    public static <T> void get(String endpoint, Class<T> responseType, Callback<T> callback) {
+    static {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .build();
+    }
+
+    public static <T> void get(String endpoint, Class<T> responseType, Callback<T> onResponse, Callback<Exception> onError) {
         executor.execute(() -> {
             try {
                 var request = new Request.Builder()
@@ -33,16 +41,17 @@ public class AsyncHttpClient {
                         .build();
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
-                        callback.call(mapper.readValue(response.body().string(), responseType));
+                        onResponse.call(mapper.readValue(response.body().string(), responseType));
                     }
                 }
             } catch (IOException exception) {
                 System.err.println(exception.getMessage());
+                onError.call(exception);
             }
         });
     }
 
-    public static void getBytes(String endpoint, Callback<byte[]> callback) {
+    public static void getBytes(String endpoint, Callback<byte[]> onResponse, Callback<Exception> onError) {
         executor.execute(() -> {
             try {
                 var request = new Request.Builder()
@@ -50,16 +59,21 @@ public class AsyncHttpClient {
                         .build();
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
-                        callback.call(response.body().bytes());
+                        onResponse.call(response.body().bytes());
                     }
                 }
             } catch (IOException exception) {
                 System.err.println(exception.getMessage());
+                onError.call(exception);
             }
         });
     }
 
-    public static <T> void post(String endpoint, Object requestBody, Class<T> responseType, Callback<T> callback) {
+    public static <T> void post(String endpoint,
+                                Object requestBody,
+                                Class<T> responseType,
+                                Callback<T> onResponse,
+                                Callback<Exception> onError) {
         executor.execute(() -> {
             try {
                 var body = RequestBody.create(JSON, mapper.writeValueAsString(requestBody));
@@ -69,11 +83,12 @@ public class AsyncHttpClient {
                         .build();
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
-                        callback.call(mapper.readValue(response.body().string(), responseType));
+                        onResponse.call(mapper.readValue(response.body().string(), responseType));
                     }
                 }
             } catch (IOException exception) {
                 System.err.println(exception.getMessage());
+                onError.call(exception);
             }
         });
     }

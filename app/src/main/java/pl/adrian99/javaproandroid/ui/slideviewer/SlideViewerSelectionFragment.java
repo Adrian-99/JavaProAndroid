@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +55,10 @@ public class SlideViewerSelectionFragment extends Fragment implements AdapterVie
                         slideCategories.forEach(category -> slideCategoriesNames.add(category.getName()));
                         slideCategoriesNamesAdapter.notifyDataSetChanged();
                     }
-                })
+                }),
+                exception -> activity.runOnUiThread(() ->
+                        Toast.makeText(activity, getString(R.string.server_connection_error), Toast.LENGTH_LONG).show()
+                )
         );
 
         return binding.getRoot();

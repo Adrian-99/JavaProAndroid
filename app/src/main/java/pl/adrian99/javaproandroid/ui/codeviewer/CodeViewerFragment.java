@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,11 @@ public class CodeViewerFragment extends Fragment {
                     codeAdapter.clear();
                     response.getCodes().forEach(codeAdapter::add);
 //                    codeAdapter.addAll(response.getCodes());
-                }));
+                }),
+                exception -> activity.runOnUiThread(() ->
+                        Toast.makeText(activity, getString(R.string.server_connection_error), Toast.LENGTH_LONG).show()
+                )
+        );
 
         return binding.getRoot();
     }
