@@ -5,6 +5,7 @@ import java.util.List;
 public class QuizQuestion {
     private Long id;
     private String question;
+    private boolean hasImage;
     private List<QuizAnswer> answers;
 
     public Long getId() {
@@ -13,6 +14,10 @@ public class QuizQuestion {
 
     public String getQuestion() {
         return question;
+    }
+
+    public boolean hasImage() {
+        return hasImage;
     }
 
     public List<QuizAnswer> getAnswers() {
@@ -25,6 +30,10 @@ public class QuizQuestion {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 
     public void setAnswers(List<QuizAnswer> answers) {

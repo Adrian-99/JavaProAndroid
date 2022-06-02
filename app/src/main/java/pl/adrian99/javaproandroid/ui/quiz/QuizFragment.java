@@ -1,6 +1,7 @@
 package pl.adrian99.javaproandroid.ui.quiz;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ public class QuizFragment extends Fragment {
     private int correctAnswersCount = 0;
     private QuizAnswerAdapter quizAnswerAdapter;
     private TextView questionText;
+    private ImageView questionImage;
     private Button sendButton;
 
     @Override
@@ -64,6 +67,7 @@ public class QuizFragment extends Fragment {
         binding.answersList.addFooterView(footerView);
 
         questionText = headerView.findViewById(R.id.question);
+        questionImage = headerView.findViewById(R.id.image);
         sendButton = footerView.findViewById(R.id.send);
 
         sendButton.setVisibility(View.INVISIBLE);
@@ -97,12 +101,26 @@ public class QuizFragment extends Fragment {
     }
 
     private void showQuestion() {
+        questionImage.setImageBitmap(null);
+        quizAnswerAdapter.clearCheckedAnswers();
+        quizAnswerAdapter.clear();
+
         if (currentQuestion < questions.size()) {
             var question = questions.get(currentQuestion);
+            if (question.hasImage()) {
+                AsyncHttpClient.getBytes("quiz/questions/image/" + question.getId(),
+                        response -> activity.runOnUiThread(() -> {
+                            questionImage.setImageBitmap(
+                                    BitmapFactory.decodeByteArray(response, 0, response.length)
+                            );
+                        }),
+                        exception -> activity.runOnUiThread(() ->
+                                Toast.makeText(activity, getString(R.string.server_connection_error), Toast.LENGTH_LONG).show()
+                        )
+                );
+            }
             Collections.shuffle(question.getAnswers());
             questionText.setText(question.getQuestion());
-            quizAnswerAdapter.clearCheckedAnswers();
-            quizAnswerAdapter.clear();
             quizAnswerAdapter.addAll(question.getAnswers().stream()
                     .map(QuizAnswer::getAnswer)
                     .collect(Collectors.toList())
@@ -110,7 +128,6 @@ public class QuizFragment extends Fragment {
             sendButton.setClickable(true);
         } else {
             questionText.setText(getString(R.string.test_results, correctAnswersCount, questions.size()));
-            quizAnswerAdapter.clear();
             sendButton.setVisibility(View.INVISIBLE);
         }
     }
