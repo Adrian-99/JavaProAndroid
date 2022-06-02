@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +26,7 @@ import pl.adrian99.javaproandroid.data.dtos.QuizAnswersValidation;
 import pl.adrian99.javaproandroid.data.dtos.QuizAnswersValidationResult;
 import pl.adrian99.javaproandroid.data.dtos.QuizQuestion;
 import pl.adrian99.javaproandroid.databinding.FragmentQuizBinding;
-import pl.adrian99.javaproandroid.util.QuizAnswerAdapter;
+import pl.adrian99.javaproandroid.util.quiz.QuizAdapter;
 
 public class QuizFragment extends Fragment {
 
@@ -37,9 +36,8 @@ public class QuizFragment extends Fragment {
     private List<QuizQuestion> questions;
     private int currentQuestion = 0;
     private int correctAnswersCount = 0;
-    private QuizAnswerAdapter quizAnswerAdapter;
-    private TextView questionText;
-    private Button sendButton;
+    private ArrayList<String> answers = new ArrayList<>();
+    private QuizAdapter quizAnswerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,22 +53,14 @@ public class QuizFragment extends Fragment {
         binding = FragmentQuizBinding.inflate(inflater, container, false);
         activity = getActivity();
 
-        var headerView = inflater.inflate(R.layout.quiz_header_layout, null);
-        var footerView = inflater.inflate(R.layout.quiz_footer_layout, null);
-
-        quizAnswerAdapter = new QuizAnswerAdapter(getContext(), new ArrayList<>());
+        quizAnswerAdapter = new QuizAdapter(answers);
         binding.answersList.setAdapter(quizAnswerAdapter);
-        binding.answersList.addHeaderView(headerView);
-        binding.answersList.addFooterView(footerView);
 
-        questionText = headerView.findViewById(R.id.question);
-        sendButton = footerView.findViewById(R.id.send);
-
-        sendButton.setVisibility(View.INVISIBLE);
-        sendButton.setOnClickListener(view -> {
-            sendButton.setClickable(false);
-            checkAnswers();
-        });
+//        quizAnswerAdapter.getSendButton().setVisibility(View.INVISIBLE);
+//        quizAnswerAdapter.getSendButton().setOnClickListener(view -> {
+//            quizAnswerAdapter.getSendButton().setClickable(false);
+//            checkAnswers();
+//        });
 
         AsyncHttpClient.get("quiz/questions/" + testId,
                 QuizQuestion[].class,
@@ -79,7 +69,7 @@ public class QuizFragment extends Fragment {
                     Collections.shuffle(questions);
                     activity.runOnUiThread(() -> {
                         showQuestion();
-                        sendButton.setVisibility(View.VISIBLE);
+                        quizAnswerAdapter.getSendButton().setVisibility(View.VISIBLE);
                     });
                 },
                 exception -> activity.runOnUiThread(() ->
@@ -100,18 +90,18 @@ public class QuizFragment extends Fragment {
         if (currentQuestion < questions.size()) {
             var question = questions.get(currentQuestion);
             Collections.shuffle(question.getAnswers());
-            questionText.setText(question.getQuestion());
+            quizAnswerAdapter.setQuestion(question.getQuestion());
             quizAnswerAdapter.clearCheckedAnswers();
-            quizAnswerAdapter.clear();
-            quizAnswerAdapter.addAll(question.getAnswers().stream()
+            answers.clear();
+            answers.addAll(question.getAnswers().stream()
                     .map(QuizAnswer::getAnswer)
                     .collect(Collectors.toList())
             );
-            sendButton.setClickable(true);
+            quizAnswerAdapter.getSendButton().setClickable(true);
         } else {
-            questionText.setText(getString(R.string.test_results, correctAnswersCount, questions.size()));
-            quizAnswerAdapter.clear();
-            sendButton.setVisibility(View.INVISIBLE);
+            quizAnswerAdapter.setQuestion(getString(R.string.test_results, correctAnswersCount, questions.size()));
+            answers.clear();
+            quizAnswerAdapter.getSendButton().setVisibility(View.INVISIBLE);
         }
     }
 
