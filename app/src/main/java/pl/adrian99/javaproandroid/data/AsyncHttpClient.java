@@ -14,9 +14,9 @@ import okhttp3.RequestBody;
 
 public class AsyncHttpClient {
 
-//    private static final String BASE_URL = "http://192.168.1.3:8080/";
-    private static final String BASE_URL = "http://192.168.100.5:8080/";
-//    private static final String BASE_URL = "http://192.168.135.180:8080/";
+    private static final String API_CONTEXT = "http://192.168.1.4:8080/public/";
+//    private static final String API_CONTEXT = "http://192.168.100.5:8080/public/";
+//    private static final String API_CONTEXT = "http://192.168.135.180:8080/public/";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static final Executor executor = Executors.newSingleThreadExecutor();
@@ -37,7 +37,7 @@ public class AsyncHttpClient {
         executor.execute(() -> {
             try {
                 var request = new Request.Builder()
-                        .url(BASE_URL + endpoint)
+                        .url(API_CONTEXT + endpoint)
                         .build();
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
@@ -57,7 +57,7 @@ public class AsyncHttpClient {
         executor.execute(() -> {
             try {
                 var request = new Request.Builder()
-                        .url(BASE_URL + endpoint)
+                        .url(API_CONTEXT + endpoint)
                         .build();
                 try (var response = client.newCall(request).execute()) {
                     if (response.body() != null) {
@@ -82,7 +82,7 @@ public class AsyncHttpClient {
             try {
                 var body = RequestBody.create(JSON, mapper.writeValueAsString(requestBody));
                 var request = new Request.Builder()
-                        .url(BASE_URL + endpoint)
+                        .url(API_CONTEXT + endpoint)
                         .post(body)
                         .build();
                 try (var response = client.newCall(request).execute()) {
