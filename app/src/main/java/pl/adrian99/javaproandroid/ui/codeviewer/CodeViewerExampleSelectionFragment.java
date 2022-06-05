@@ -58,7 +58,7 @@ public class CodeViewerExampleSelectionFragment extends Fragment implements Adap
         binding.examplesList.setOnItemClickListener(this);
 
         AsyncHttpClient.get(
-                "code/examples/" + categoryId,
+                "codes/examples/" + categoryId,
                 CodeExampleBrief[].class,
                 response -> activity.runOnUiThread(() -> {
                     if (response != null) {

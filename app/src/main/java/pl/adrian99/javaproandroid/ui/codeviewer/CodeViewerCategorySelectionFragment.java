@@ -48,7 +48,7 @@ public class CodeViewerCategorySelectionFragment extends Fragment implements Ada
         binding.categoriesList.setOnItemClickListener(this);
 
         AsyncHttpClient.get(
-                "code/categories",
+                "codes/categories",
                 CodeCategory[].class,
                 response -> activity.runOnUiThread(() -> {
                     if (response != null) {

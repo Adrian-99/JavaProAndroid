@@ -49,7 +49,7 @@ public class CodeViewerFragment extends Fragment {
         var codeHeader = inflater.inflate(R.layout.code_header_layout, null);
         binding.codesList.addHeaderView(codeHeader);
 
-        AsyncHttpClient.get("code/" + codeExampleId,
+        AsyncHttpClient.get("codes/" + codeExampleId,
                 CodeExample.class,
                 response -> activity.runOnUiThread(() -> {
                     ((TextView)codeHeader.findViewById(R.id.name)).setText(response.getName());

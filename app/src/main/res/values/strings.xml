@@ -6,10 +6,10 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_quiz">Quiz Java PRO</string>
-    <string name="menu_slideviewer">Slide Viewer PRO</string>
-    <string name="menu_codeviewer">Code Viewer PRO</string>
-    <string name="menu_webtools">Web Tools PRO</string>
+    <string name="menu_quiz">Quiz Java</string>
+    <string name="menu_slideviewer">Slide Viewer</string>
+    <string name="menu_codeviewer">Code Viewer</string>
+    <string name="menu_webtools">Web Tools</string>
 
     <string name="test_send">Wyślij</string>
     <string name="test_results">Test zakończony - wynik: %d/%d</string>
