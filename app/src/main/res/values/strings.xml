@@ -11,10 +11,14 @@
     <string name="menu_codeviewer">Code Viewer</string>
     <string name="menu_webtools">Web Tools</string>
 
-    <string name="test_send">Wyślij</string>
-    <string name="test_results">Test zakończony - wynik: %d/%d</string>
+    <string name="quiz_question_number">Pytanie %d z %d</string>
+    <string name="quiz_send">Wyślij</string>
+    <string name="quiz_ended">Quiz zakończony</string>
+    <string name="quiz_result">Wynik: %d/%d</string>
 
-    <string name="gt"><![CDATA[>]]></string>
-    <string name="lt"><![CDATA[<]]></string>
+    <string name="slide_viewer_prev"><![CDATA[<]]></string>
+    <string name="slide_viewer_number">%d/%d</string>
+    <string name="slide_viewer_next"><![CDATA[>]]></string>
+
     <string name="server_connection_error">Nie udało się połączyć z serwerem</string>
 </resources>

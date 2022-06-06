@@ -98,6 +98,11 @@ public class SlideViewerFragment extends Fragment {
         var slideId = slideIds.getSlideIds().get(currentSlide);
         if (slides.containsKey(slideId)) {
             binding.slideDisplay.setImageBitmap(slides.get(slideId));
+            binding.slideNumber.setText(getString(
+                    R.string.slide_viewer_number,
+                    currentSlide + 1,
+                    slideIds.getSlideIds().size()
+            ));
         } else {
             AsyncHttpClient.getBytes(
                     "slides/" + slideId,
@@ -108,6 +113,11 @@ public class SlideViewerFragment extends Fragment {
                         );
                         if (slideIds.getSlideIds().get(currentSlide).equals(slideId)) {
                             binding.slideDisplay.setImageBitmap(slides.get(slideId));
+                            binding.slideNumber.setText(getString(
+                                    R.string.slide_viewer_number,
+                                    currentSlide + 1,
+                                    slideIds.getSlideIds().size()
+                            ));
                         }
                     }),
                     exception -> activity.runOnUiThread(() ->

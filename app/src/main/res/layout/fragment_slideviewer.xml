@@ -13,21 +13,32 @@
         android:layout_marginBottom="200dp" />
 
     <Button
-        android:id="@+id/button_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/button_prev"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="48dp"
-        android:text="@string/gt" />
-
-    <Button
         android:id="@+id/button_prev"
-        android:layout_width="wrap_content"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="48dp"
         android:layout_marginBottom="85dp"
-        android:text="@string/lt" />
+        android:text="@string/slide_viewer_prev" />
+
+    <TextView
+        android:id="@+id/slide_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/button_prev"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button_prev"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="48dp"
+        android:text="@string/slide_viewer_next" />
+
 </RelativeLayout>

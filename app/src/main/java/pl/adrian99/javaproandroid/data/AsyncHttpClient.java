@@ -14,8 +14,8 @@ import okhttp3.RequestBody;
 
 public class AsyncHttpClient {
 
-    private static final String API_CONTEXT = "http://192.168.1.3:8080/public/";
-//    private static final String API_CONTEXT = "http://192.168.100.5:8080/public/";
+//    private static final String API_CONTEXT = "http://192.168.1.3:8080/public/";
+    private static final String API_CONTEXT = "http://192.168.100.4:8080/public/";
 //    private static final String API_CONTEXT = "http://192.168.135.180:8080/public/";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 

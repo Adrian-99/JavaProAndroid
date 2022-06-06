@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +39,7 @@ public class QuizFragment extends Fragment {
     private int currentQuestion = 0;
     private int correctAnswersCount = 0;
     private QuizAnswerAdapter quizAnswerAdapter;
+    private TextView questionNumber;
     private TextView questionText;
     private ImageView questionImage;
     private Button sendButton;
@@ -66,6 +66,7 @@ public class QuizFragment extends Fragment {
         binding.answersList.addHeaderView(headerView);
         binding.answersList.addFooterView(footerView);
 
+        questionNumber = headerView.findViewById(R.id.question_number);
         questionText = headerView.findViewById(R.id.question);
         questionImage = headerView.findViewById(R.id.image);
         sendButton = footerView.findViewById(R.id.send);
@@ -120,6 +121,7 @@ public class QuizFragment extends Fragment {
                 );
             }
             Collections.shuffle(question.getAnswers());
+            questionNumber.setText(getString(R.string.quiz_question_number, currentQuestion + 1, questions.size()));
             questionText.setText(question.getQuestion());
             quizAnswerAdapter.addAll(question.getAnswers().stream()
                     .map(QuizAnswer::getAnswer)
@@ -127,7 +129,8 @@ public class QuizFragment extends Fragment {
             );
             sendButton.setClickable(true);
         } else {
-            questionText.setText(getString(R.string.test_results, correctAnswersCount, questions.size()));
+            questionNumber.setText(getString(R.string.quiz_ended));
+            questionText.setText(getString(R.string.quiz_result, correctAnswersCount, questions.size()));
             sendButton.setVisibility(View.INVISIBLE);
         }
     }
